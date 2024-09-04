@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Booking App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    .booking-container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    input[type="text"], input[type="date"], select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #28a745;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #218838;
+    }
+
+    .success-message {
+      background-color: #d4edda;
+      color: #155724;
+      padding: 10px;
+      margin-top: 20px;
+      border: 1px solid #c3e6cb;
+      border-radius: 4px;
+      display: none;
+    }
+
+    .time-slots {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .time-slots button {
+      padding: 10px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .time-slots button.selected {
+      background-color: #28a745;
+    }
+
+    .time-slots button.disabled {
+      background-color: #6c757d;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Simple Booking App</h1>
+
+  <div class="booking-container">
+    <form id="booking-form">
+      <label for="name">Your Name:</label>
+      <input type="text" id="name" placeholder="Enter your name" required>
+
+      <label for="date">Select a Date:</label>
+      <input type="date" id="date" required>
+
+      <label for="time-slot">Select a Time Slot:</label>
+      <div class="time-slots">
+        <button type="button" class="time-slot" data-time="09:00 AM">09:00 AM</button>
+        <button type="button" class="time-slot" data-time="10:00 AM">10:00 AM</button>
+        <button type="button" class="time-slot" data-time="11:00 AM">11:00 AM</button>
+        <button type="button" class="time-slot" data-time="12:00 PM">12:00 PM</button>
+        <button type="button" class="time-slot" data-time="01:00 PM">01:00 PM</button>
+        <button type="button" class="time-slot" data-time="02:00 PM">02:00 PM</button>
+        <button type="button" class="time-slot" data-time="03:00 PM">03:00 PM</button>
+        <button type="button" class="time-slot" data-time="04:00 PM">04:00 PM</button>
+        <button type="button" class="time-slot" data-time="05:00 PM">05:00 PM</button>
+      </div>
+
+      <input type="hidden" id="selected-time-slot">
+
+      <button type="submit">Book Now</button>
+
+      <div class="success-message" id="success-message">
+        Booking confirmed! We'll see you at <span id="confirm-time"></span> on <span id="confirm-date"></span>.
+      </div>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById('booking-form');
+    const timeSlots = document.querySelectorAll('.time-slot');
+    const successMessage = document.getElementById('success-message');
+    const confirmTime = document.getElementById('confirm-time');
+    const confirmDate = document.getElementById('confirm-date');
+    const selectedTimeSlotInput = document.getElementById('selected-time-slot');
+
+    // Time slot selection logic
+    timeSlots.forEach(button => {
+      button.addEventListener('click', function () {
+        timeSlots.forEach(slot => slot.classList.remove('selected'));
+        this.classList.add('selected');
+        selectedTimeSlotInput.value = this.dataset.time;
+      });
+    });
+
+    // Form submission logic
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById('name').value;
+      const date = document.getElementById('date').value;
+      const timeSlot = selectedTimeSlotInput.value;
+
+      if (!timeSlot) {
+        alert('Please select a time slot.');
+        return;
+      }
+
+      confirmDate.textContent = date;
+      confirmTime.textContent = timeSlot;
+
+      successMessage.style.display = 'block';
+    });
+  </script>
+</body>
+</html>
